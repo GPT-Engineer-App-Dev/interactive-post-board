@@ -1,12 +1,13 @@
-import { useState } from "react";
-import { Box, Container, VStack, Text, Input, Textarea, Button, HStack, Heading, Flex } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Box, Button, Container, Flex, FormControl, FormLabel, Heading, Input, Text, Textarea, VStack } from "@chakra-ui/react";
 
 const Index = () => {
   const [posts, setPosts] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const handlePostSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const newPost = {
       title,
       content,
@@ -22,29 +23,36 @@ const Index = () => {
       <Flex as="nav" bg="blue.500" color="white" p={4} mb={4} justifyContent="center">
         <Heading size="lg">Public Post Board</Heading>
       </Flex>
-      <VStack spacing={4} align="stretch">
-        <Box as="form" onSubmit={(e) => { e.preventDefault(); handlePostSubmit(); }} p={4} borderWidth={1} borderRadius="md" boxShadow="md">
-          <VStack spacing={4}>
+      <Box as="form" onSubmit={handleSubmit} mb={8}>
+        <VStack spacing={4}>
+          <FormControl id="title" isRequired>
+            <FormLabel>Title</FormLabel>
             <Input
-              placeholder="Title"
+              type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              isRequired
             />
+          </FormControl>
+          <FormControl id="content" isRequired>
+            <FormLabel>Content</FormLabel>
             <Textarea
-              placeholder="Content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              isRequired
             />
-            <Button type="submit" colorScheme="blue" width="full">Post</Button>
-          </VStack>
-        </Box>
+          </FormControl>
+          <Button type="submit" colorScheme="blue" width="full">
+            Submit
+          </Button>
+        </VStack>
+      </Box>
+      <VStack spacing={4}>
         {posts.map((post, index) => (
-          <Box key={index} p={4} borderWidth={1} borderRadius="md" boxShadow="md">
+          <Box key={index} p={4} borderWidth="1px" borderRadius="md" width="full">
             <Heading size="md">{post.title}</Heading>
             <Text mt={2}>{post.content}</Text>
-            <Text mt={2} fontSize="sm" color="gray.500">{post.timestamp}</Text>
+            <Text mt={2} fontSize="sm" color="gray.500">
+              {post.timestamp}
+            </Text>
           </Box>
         ))}
       </VStack>
